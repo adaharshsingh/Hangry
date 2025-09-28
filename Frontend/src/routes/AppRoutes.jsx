@@ -15,12 +15,12 @@ const AppRoutes = () => {
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<ChooseRegister />} />
+                <Route path="/register" element={<ChooseRegister />} />
                 <Route path="/user/register" element={<UserRegister />} />
                 <Route path="/user/login" element={<UserLogin />} />
                 <Route path="/food/register" element={<FoodPartnerRegister />} />
                 <Route path="/food/login" element={<FoodPartnerLogin />} />
-                <Route path="/" element={<><Home /><BottomNav /></>} />
+                <Route path="/home" element={<><Home /><BottomNav /></>} />
                 <Route path="/saved" element={<><Saved /><BottomNav /></>} />
                 <Route path="/create-food" element={<CreateFood />} />
                 <Route path="/food/:id" element={<Profile />} />
