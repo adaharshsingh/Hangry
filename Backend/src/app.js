@@ -12,11 +12,13 @@ app.use(cookieParser());
 app.get("/",(req,res)=>{
     res.send("Hello world");
 })
+const FRONTEND = process.env.FRONTEND_URL || 'http://localhost:5173';
+
 app.use(cors({
-    origin: ['http://localhost:5173'],
-    methods: ['GET','POST','PUT','DELETE'],
-    credentials: true
-}))
+  origin: FRONTEND,
+  methods: ['GET','POST','PUT','DELETE'],
+  credentials: true
+}));
 
 app.use('/api/auth',authRoutes)
 app.use('/api/item',itemRoutes)
