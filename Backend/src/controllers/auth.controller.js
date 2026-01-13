@@ -8,8 +8,8 @@ function getCookieOptions() {
     const isProduction = process.env.NODE_ENV === 'production';
     return {
         httpOnly: true,
-        secure: isProduction, // Only secure in production (HTTPS)
-        sameSite: isProduction ? 'Strict' : 'Lax', // Lax for localhost, Strict for production
+        secure: true, // Always secure for HTTPS
+        sameSite: isProduction ? 'None' : 'Lax', // 'None' for cross-domain (production), 'Lax' for localhost
         maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
     };
 }
