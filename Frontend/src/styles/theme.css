@@ -65,39 +65,38 @@
   --transition-slow: 250ms cubic-bezier(.4,0,.2,1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-bg: #0a0e27;
-    --color-surface: #131829;
-    --color-surface-alt: #1a1f3a;
-    --color-surface-tertiary: #242d4a;
-    --color-border: #2a3452;
-    --color-border-light: #3a4560;
-    --color-text: #f0f2f8;
-    --color-text-secondary: #a0a9c0;
-    --color-text-tertiary: #7a84a0;
-    
-    /* Accent colors adjusted for dark mode */
-    --color-accent: #ff7043;
-    --color-accent-light: #ff8b5e;
-    --color-accent-hover: #ff6630;
-    --color-accent-active: #e55a2b;
-    
-    --color-secondary: #00d99f;
-    --color-secondary-light: #00f4b6;
-    --color-secondary-hover: #00c98a;
-    
-    --color-danger: #f06d6d;
-    --color-danger-light: #f08888;
-    
-    --color-success: #3dd68e;
-    
-    --shadow-xs: 0 1px 2px rgba(0,0,0,.3);
-    --shadow-sm: 0 1px 3px rgba(0,0,0,.4), 0 1px 2px rgba(0,0,0,.2);
-    --shadow-md: 0 4px 6px rgba(0,0,0,.5), 0 2px 4px rgba(0,0,0,.3);
-    --shadow-lg: 0 10px 15px rgba(0,0,0,.6), 0 4px 6px rgba(0,0,0,.4);
-    --shadow-xl: 0 20px 25px rgba(0,0,0,.7), 0 10px 10px rgba(0,0,0,.5);
-  }
+.dark {
+  --color-bg: #0a0e27;
+  --color-surface: #131829;
+  --color-surface-alt: #1a1f3a;
+  --color-surface-tertiary: #242d4a;
+  --color-border: #2a3452;
+  --color-border-light: #3a4560;
+  --color-text: #f0f2f8;
+  --color-text-secondary: #a0a9c0;
+  --color-text-tertiary: #7a84a0;
+  
+  /* Accent colors adjusted for dark mode */
+  --color-accent: #ff7043;
+  --color-accent-light: #ff8b5e;
+  --color-accent-hover: #ff6630;
+  --color-accent-active: #e55a2b;
+  
+  --color-secondary: #00d99f;
+  --color-secondary-light: #00f4b6;
+  --color-secondary-hover: #00c98a;
+  
+  --color-danger: #f06d6d;
+  --color-danger-light: #f08888;
+  
+  --color-success: #3dd68e;
+  
+  --shadow-xs: 0 1px 2px rgba(0,0,0,.3);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.4), 0 1px 2px rgba(0,0,0,.2);
+  --shadow-md: 0 4px 6px rgba(0,0,0,.5), 0 2px 4px rgba(0,0,0,.3);
+  --shadow-lg: 0 10px 15px rgba(0,0,0,.6), 0 4px 6px rgba(0,0,0,.4);
+  --shadow-xl: 0 20px 25px rgba(0,0,0,.7), 0 10px 10px rgba(0,0,0,.5);
+}
 }
 
 /* Base element theming (can be imported once globally) */

@@ -39,9 +39,9 @@ const BottomNav = () => {
   }, [])
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-700 z-40" role="navigation" aria-label="Bottom">
+    <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 z-40" role="navigation" aria-label="Bottom">
       <div className="flex justify-around items-center h-20 px-4">
-        <NavLink to="/home" end className={({ isActive }) => `flex flex-col items-center gap-1 px-4 py-2 transition-colors ${isActive ? 'text-orange-500' : 'text-gray-400 hover:text-white'}`}>
+        <NavLink to="/home" end className={({ isActive }) => `flex flex-col items-center gap-1 px-4 py-2 transition-colors ${isActive ? 'text-orange-500' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}>
           <span className="w-6 h-6" aria-hidden="true">
             {/* home icon */}
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -56,7 +56,7 @@ const BottomNav = () => {
         {userType && (
           <NavLink 
             to={userType === 'partner' ? '/food/profile' : '/user/profile'} 
-            className={({ isActive }) => `flex flex-col items-center gap-1 px-4 py-2 transition-colors ${isActive ? 'text-orange-500' : 'text-gray-400 hover:text-white'}`}
+            className={({ isActive }) => `flex flex-col items-center gap-1 px-4 py-2 transition-colors ${isActive ? 'text-orange-500' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
           >
             <span className="w-6 h-6" aria-hidden="true">
               {/* profile icon */}

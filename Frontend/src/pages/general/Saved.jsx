@@ -48,7 +48,7 @@ const Saved = () => {
     }
 
     return (
-        <div className="flex flex-col h-screen w-full bg-gray-950 pb-20">
+        <div className="flex flex-col h-screen w-full bg-white dark:bg-gray-950 pb-20">
             <div className="flex-1 overflow-hidden">
                 <ReelFeed
                     items={videos}
