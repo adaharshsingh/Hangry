@@ -4,5 +4,11 @@
   "framework": "vite",
   "env": {
     "VITE_API": "https://hangry-5t00.onrender.com"
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
 }
