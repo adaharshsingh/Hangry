@@ -12,31 +12,41 @@ app.use(cookieParser());
 app.get("/",(req,res)=>{
     res.send("Hello world");
 })
-const FRONTEND = (process.env.FRONTEND_URL || 'http://localhost:5173').replace(/\/+$/, '');
 
-// Replace this:
-app.use(cors({
-  origin: FRONTEND,
-  methods: ['GET','POST','PUT','DELETE'],
-  credentials: true
-}));
+// Support multiple frontend URLs (comma-separated) from env, or use defaults
+const DEFAULT_FRONTENDS = [
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'http://localhost:5174',
+  process.env.FRONTEND_URL || 'https://hangry-alpha.vercel.app'
+];
 
-// With this robust dynamic checker (preferred)
-const FRONTENDS = (process.env.FRONTEND_URLS || FRONTEND)
-  .split(',')
-  .map(s => s.trim().replace(/\/+$/, ''))
-  .filter(Boolean);
+const FRONTEND_URLS = process.env.FRONTEND_URLS 
+  ? process.env.FRONTEND_URLS.split(',').map(s => s.trim()).filter(Boolean)
+  : DEFAULT_FRONTENDS;
 
+// CORS configuration with dynamic origin checker
 app.use(cors({
   origin: (origin, callback) => {
     // allow non-browser requests (server-to-server, curl) which have no origin
     if (!origin) return callback(null, true);
-    if (FRONTENDS.includes(origin.replace(/\/+$/, ''))) return callback(null, true);
+    
+    // Check if origin matches any allowed frontend
+    const isAllowed = FRONTEND_URLS.some(frontend => {
+      const normalizedFrontend = frontend.replace(/\/+$/, '');
+      const normalizedOrigin = origin.replace(/\/+$/, '');
+      return normalizedOrigin === normalizedFrontend;
+    });
+    
+    if (isAllowed) return callback(null, true);
+    
+    console.warn(`CORS request blocked from origin: ${origin}`);
     return callback(new Error('Not allowed by CORS'));
   },
-  methods: ['GET','POST','PUT','DELETE','OPTIONS'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-  credentials: true
+  credentials: true,
+  maxAge: 3600
 }));
 
 app.use('/api/auth',authRoutes)

@@ -2,9 +2,9 @@
 
 /* Page container ensures full viewport and background */
 .reels-page {
-  height: 100dvh;
+  height: 100%;
   background: var(--color-bg);
-  overflow: hidden; /* parent hides overscroll glow on iOS */
+  overflow: hidden;
 }
 
 /* Vertical feed with snap scrolling */
@@ -18,13 +18,18 @@
   scroll-behavior: smooth;
 }
 
-/* Each reel takes full viewport */
+/* Each reel takes available height */
 .reel {
   position: relative;
-  height: 100dvh;
+  height: 100%;
+  min-height: 100vh;
   width: 100%;
   scroll-snap-align: start;
-  background: #000; /* fallback while video loads */
+  background: #000;
+  animation: fadeIn 300ms var(--transition-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .reel-video {
@@ -32,7 +37,7 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover; /* cover entire screen */
+  object-fit: contain;
   object-position: center;
   background: #000;
 }
@@ -42,111 +47,210 @@
   position: absolute;
   inset: 0;
   display: flex;
-  align-items: flex-end; /* content near bottom */
-  pointer-events: none; /* allow click-through except controls */
+  align-items: flex-end;
+  pointer-events: none;
 }
 
-/* Subtle top-to-bottom gradient so text is readable on any video */
+/* Sophisticated gradient overlay */
 .reel-overlay-gradient {
   position: absolute;
   inset: 0;
   background: linear-gradient(180deg,
-    rgba(0,0,0,0.25) 0%,
-    rgba(0,0,0,0.05) 30%,
-    rgba(0,0,0,0.35) 65%,
-    rgba(0,0,0,0.65) 100%
+    rgba(0,0,0,0) 0%,
+    rgba(0,0,0,0.1) 30%,
+    rgba(0,0,0,0.3) 60%,
+    rgba(0,0,0,0.7) 90%,
+    rgba(0,0,0,0.85) 100%
   );
+  pointer-events: none;
 }
 
 .reel-content {
   position: relative;
   width: 100%;
   padding: var(--space-6);
-  padding-bottom: calc(env(safe-area-inset-bottom, 0) + 72px); /* make space for bottom nav */
+  padding-bottom: calc(env(safe-area-inset-bottom, 0) + 72px);
   display: flex;
   flex-direction: column;
-  padding-right: 4.5rem;
+  padding-right: 5.5rem;
   gap: var(--space-4);
-  pointer-events: auto; /* enable button click */
+  pointer-events: auto;
+  animation: slideInUp 400ms var(--transition-base);
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Truncated to two lines */
 .reel-description {
-  color: #fff;
-  text-shadow: 0 1px 2px rgba(0,0,0,.4);
-  font-size: 1rem;
-  line-height: 1.3;
+  color: #ffffff;
+  text-shadow: 0 2px 8px rgba(0,0,0,.5);
+  font-size: 1.05rem;
+  font-weight: 500;
+  line-height: 1.4;
   display: -webkit-box;
   line-clamp: 2;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   max-width: 90ch;
+  letter-spacing: 0.2px;
 }
 
 .reel-btn {
   align-self: flex-start;
-  background: var(--color-accent);
-  color: #000000;
-  border-radius: 999px;
-  padding: 10px 16px;
+  background: var(--gradient-accent);
+  color: #ffffff;
+  border-radius: var(--radius-full);
+  padding: 12px 20px;
   font-weight: 700;
-  letter-spacing: .3px;
+  letter-spacing: .4px;
   text-decoration: none;
-  box-shadow: var(--shadow-md);
-  transition: transform var(--transition-base), background var(--transition-base), box-shadow var(--transition-base);
+  box-shadow: var(--shadow-xl);
+  transition: all var(--transition-base);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  border: none;
+  cursor: pointer;
 }
 
-.reel-btn:hover { background: var(--color-accent-hover); }
-.reel-btn:active { transform: translateY(1px); }
-.reel-btn:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.reel-btn:hover { 
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
 
-/* Desktop tweaks */
-@media (min-width: 768px) {
-  .reel-content { padding: 36px; }
-  .reel-description { font-size: 1.05rem; max-width: 70ch; }
+.reel-btn:active { 
+  transform: translateY(-1px);
+}
+
+.reel-btn:focus-visible { 
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
 }
 
 /* Right-side vertical actions (like, bookmark, comments) */
 .reel-actions {
   position: absolute;
-  right: 10px;
-  bottom: 96px; /* above bottom CTA and nav */
+  right: 12px;
+  bottom: 100px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
   pointer-events: auto;
+  animation: slideInRight 500ms var(--transition-base);
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .reel-action {
-  width: 48px;
-  height: 48px;
-  border-radius: 999px;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-full);
   display: grid;
   place-items: center;
-  background: color-mix(in srgb, #000 35%, transparent);
-  backdrop-filter: blur(2px);
-  color: #fff;
-  border: 1px solid rgba(255,255,255,.15);
-  box-shadow: var(--shadow-md);
+  background: color-mix(in srgb, rgba(0,0,0,.45), transparent);
+  backdrop-filter: blur(8px);
+  color: #ffffff;
+  border: 1.5px solid rgba(255,255,255,.2);
+  box-shadow: var(--shadow-lg);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  position: relative;
+  overflow: hidden;
 }
 
-.reel-action:active { transform: translateY(1px); }
+.reel-action::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--gradient-accent);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+  z-index: -1;
+}
+
+.reel-action:hover {
+  transform: scale(1.1);
+  border-color: rgba(255,255,255,.4);
+}
+
+.reel-action:active { 
+  transform: scale(0.98);
+}
+
+.reel-action:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
 
 .reel-action__count {
-  color: #fff;
+  color: #ffffff;
   text-align: center;
-  font-size: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-top: 2px;
 }
 
-.reel-action-group{
+.reel-action-group {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  color: #fff;
+  gap: 6px;
+  color: #ffffff;
+  animation: fadeIn 600ms var(--transition-base);
 }
 
-.empty-state{
-  position: absolute; inset: 0; display: grid; place-items: center; color: #fff;
+.empty-state {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #ffffff;
+  text-align: center;
+  font-size: 1.1rem;
+  text-shadow: 0 2px 8px rgba(0,0,0,.5);
+}
+
+/* Desktop tweaks */
+@media (min-width: 768px) {
+  .reel-content { 
+    padding: 40px;
+    padding-right: 6rem;
+  }
+  
+  .reel-description { 
+    font-size: 1.15rem; 
+    max-width: 70ch;
+  }
+  
+  .reel-actions {
+    right: 24px;
+    bottom: 120px;
+    gap: 20px;
+  }
+  
+  .reel-action {
+    width: 56px;
+    height: 56px;
+  }
 }

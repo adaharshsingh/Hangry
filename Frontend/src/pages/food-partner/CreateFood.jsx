@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import axios from 'axios';
 import '../../styles/create-food.css';
 import { useNavigate } from 'react-router-dom';
+import Navbar from '../../components/Navbar';
 
 const CreateFood = () => {
     const [ name, setName ] = useState('');
@@ -61,7 +62,7 @@ const CreateFood = () => {
         })
 
         console.log(response.data);
-        navigate("/home"); // Redirect to home or another page after successful creation
+        navigate("/food/profile"); // Redirect to food partner profile after successful creation
         // Optionally reset
         // setName(''); setDescription(''); setVideoFile(null);
     };
@@ -69,14 +70,16 @@ const CreateFood = () => {
     const isDisabled = useMemo(() => !name.trim() || !videoFile, [ name, videoFile ]);
 
     return (
-        <div className="create-food-page">
-            <div className="create-food-card">
-                <header className="create-food-header">
-                    <h1 className="create-food-title">Create Food</h1>
-                    <p className="create-food-subtitle">Upload a short video, give it a name, and add a description.</p>
-                </header>
+        <>
+            <Navbar />
+            <div className="create-food-page">
+                <div className="create-food-card">
+                    <header className="create-food-header">
+                        <h1 className="create-food-title">Create Food</h1>
+                        <p className="create-food-subtitle">Upload a short video, give it a name, and add a description.</p>
+                    </header>
 
-                <form className="create-food-form" onSubmit={onSubmit}>
+                    <form className="create-food-form" onSubmit={onSubmit}>
                     <div className="field-group">
                         <label htmlFor="foodVideo">Food Video</label>
                         <input
@@ -154,15 +157,15 @@ const CreateFood = () => {
                             onChange={(e) => setDescription(e.target.value)}
                         />
                     </div>
-
                     <div className="form-actions">
                         <button className="btn-primary" type="submit" disabled={isDisabled}>
                             Save Food
                         </button>
                     </div>
                 </form>
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 

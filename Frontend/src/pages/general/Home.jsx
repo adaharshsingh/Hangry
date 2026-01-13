@@ -1,27 +1,21 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios';
-import '../../styles/reels.css'
+import axios from 'axios'
 import ReelFeed from '../../components/ReelFeed'
+import BottomNav from '../../components/BottomNav'
 
 const Home = () => {
     const [ videos, setVideos ] = useState([])
-    // Autoplay behavior is handled inside ReelFeed
 
     useEffect(() => {
         axios.get(`${import.meta.env.VITE_API}/api/item`, { withCredentials: true })
             .then(response => {
-
                 console.log(response.data);
-
                 setVideos(response.data.items)
             })
             .catch(() => { /* noop: optionally handle error */ })
     }, [])
 
-    // Using local refs within ReelFeed; keeping map here for dependency parity if needed
-
     async function likeVideo(item) {
-
         const response = await axios.post(`${import.meta.env.VITE_API}/api/item/like`, { itemId: item._id }, {withCredentials: true})
 
         if(response.data.like){
@@ -31,7 +25,6 @@ const Home = () => {
             console.log("Video unliked");
             setVideos((prev) => prev.map((v) => v._id === item._id ? { ...v, likeCount: v.likeCount - 1 } : v))
         }
-        
     }
 
     async function saveVideo(item) {
@@ -45,12 +38,19 @@ const Home = () => {
     }
 
     return (
-        <ReelFeed
-            items={videos}
-            onLike={likeVideo}
-            onSave={saveVideo}
-            emptyMessage="No videos available."
-        />
+        <div className="flex flex-col h-screen w-full bg-gray-950 pb-20">
+            <div className="flex-1 overflow-hidden">
+                <ReelFeed
+                    items={videos}
+                    onLike={likeVideo}
+                    onSave={saveVideo}
+                    showSaveButton={true}
+                    emptyMessage="No videos available."
+                />
+            </div>
+            <BottomNav />
+        </div>
     )
 }
+
 export default Home

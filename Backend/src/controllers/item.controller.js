@@ -104,4 +104,91 @@ async function getSavedfoodItems(req, res) {
     res.status(200).json({message:"Saved foods fetched successfully",savedFoods});
 }
 
-module.exports = { createItem, getItems, likeItem, getSavedItems,getSavedfoodItems };
+async function getItemById(req, res) {
+  try {
+    const { id } = req.params;
+    const item = await itemModel.findById(id).populate('food');
+    
+    if (!item) {
+      return res.status(404).json({ message: "Item not found" });
+    }
+
+    return res.status(200).json({ message: "Item fetched successfully", item });
+  } catch (err) {
+    console.error("Error in getItemById:", err);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+async function updateItem(req, res) {
+  try {
+    const { id } = req.params;
+    const food = req.food;
+
+    if (!food || !food._id) {
+      return res.status(400).json({ message: "Missing food context" });
+    }
+
+    const item = await itemModel.findById(id);
+    if (!item) {
+      return res.status(404).json({ message: "Item not found" });
+    }
+
+    // Check if food partner owns this item
+    if (item.food.toString() !== food._id.toString()) {
+      return res.status(403).json({ message: "Unauthorized to update this item" });
+    }
+
+    const updateData = {
+      name: req.body.name || item.name,
+      description: req.body.description || item.description,
+    };
+
+    // If a new video file is uploaded
+    if (req.file && req.file.buffer) {
+      const fileUploadResult = await storageService.uploadImage(req.file.buffer, uuid());
+      updateData.video = fileUploadResult.url;
+    }
+
+    const updatedItem = await itemModel.findByIdAndUpdate(id, updateData, { new: true });
+
+    return res.status(200).json({ message: "Item updated successfully", item: updatedItem });
+  } catch (err) {
+    console.error("Error in updateItem:", err);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+async function deleteItem(req, res) {
+  try {
+    const { id } = req.params;
+    const food = req.food;
+
+    if (!food || !food._id) {
+      return res.status(400).json({ message: "Missing food context" });
+    }
+
+    const item = await itemModel.findById(id);
+    if (!item) {
+      return res.status(404).json({ message: "Item not found" });
+    }
+
+    // Check if food partner owns this item
+    if (item.food.toString() !== food._id.toString()) {
+      return res.status(403).json({ message: "Unauthorized to delete this item" });
+    }
+
+    await itemModel.findByIdAndDelete(id);
+    
+    // Also delete associated likes and saves
+    await likeModel.deleteMany({ item: id });
+    await saveModel.deleteMany({ item: id });
+
+    return res.status(200).json({ message: "Item deleted successfully" });
+  } catch (err) {
+    console.error("Error in deleteItem:", err);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+module.exports = { createItem, getItems, likeItem, getSavedItems, getSavedfoodItems, getItemById, updateItem, deleteItem };

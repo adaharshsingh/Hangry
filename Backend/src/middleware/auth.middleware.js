@@ -10,11 +10,7 @@ async function authFoodMiddleware(req, res, next) {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log("Decoded JWT:", decoded);
-
     const food = await foodModel.findById(decoded.id);
-    console.log("Authenticated food:", food);
-
     req.food = food;
     next();
   } catch (err) {
@@ -30,9 +26,7 @@ async function authUserMiddleware(req, res, next) {
   }
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log("Decoded JWT:", decoded);
     const user = await userModel.findById(decoded.id);
-    console.log("Authenticated user:", user);
     req.user = user;
     next();
   } catch (err) {
